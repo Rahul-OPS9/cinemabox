@@ -1,0 +1,541 @@
+<!DOCTYPE html><html lang="en">
+<head>
+ <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CinemaBox – Movies </title>
+  <meta name="description" content="Responsive front‑end template for listing and downloading your own licensed or original movies." />
+
+ <style>
+    :root{
+      --bg: #0b0f17;
+      -surface: #111827;
+      --surface-2:#0f1623;
+      --text: #e5e7eb;
+      --muted:#9ca3af;
+      --brand:#e4e725;
+      --brand-2:#69f0b8;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --card: rgba(255,255,255,0.03);
+      --ring: rgba(94,234,212,0.35);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+ 
+.wrap{max-width:1200px;margin-inline:auto;padding:20px;;}
+html{ background-color: #001014}
+header{
+  position:sticky; 
+  top:0; z-index:5; 
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(11,15,23,.85), rgba(11,15,23,.55) 60%, transparent);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.bar{display:grid; 
+  grid-template-columns: 190px 1fr auto;
+  gap:16px; align-items:center;
+  
+}
+
+.logo{display:flex;
+  align-items:center;
+  gap:10px;font-weight:800;
+  letter-spacing:.4px}
+
+.logo-badge{width:38px;
+  height:38px;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  display:grid;
+  place-items:center;
+  color:#001014;
+  font-weight:900; 
+  box-shadow:0 6px 18px var(--ring)}
+
+.search{display:flex; 
+  gap:10px; 
+  align-items:center}
+
+.search input{
+  width:100%; 
+  padding:12px 14px; 
+  border-radius:12px; 
+  border:1px solid rgba(255,255,255,.08);
+  background: var(--surface); 
+  color: var(--text); 
+  outline: none;
+}
+
+.search input::placeholder{color:var(--muted)}
+.filters{display:flex; 
+  gap:10px; 
+  align-items:center}
+
+select, button, .btn{
+  background: var(--surface); 
+  color: var(--text); 
+  border:1px solid rgba(255,255,255,.08);
+  padding:10px 12px; 
+  border-radius:12px; 
+  cursor:pointer; 
+  transition:.2s transform, .2s box-shadow, .2s background;
+}
+button:focus, select:focus, .search input:focus{box-shadow: 0 0 0 4px var(--ring)}
+.toggle{background:linear-gradient(135deg,var(--brand),var(--brand-2)); 
+  color:#051219; 
+  border:none; 
+  font-weight:700}
+
+/* Hero */
+.hero{
+  margin-top:18px; 
+  padding:18px; 
+  border:1px solid rgba(255,255,255,.06);
+  background: linear-gradient(180deg, rgba(96,165,250,.08), rgba(94,234,212,.04));
+  border-radius: var(--radius); 
+  box-shadow: var(--shadow);
+  display:grid; 
+  grid-template-columns: 1.2fr 2fr; 
+  gap:20px; 
+  align-items:center;
+}
+.hero img{width:100%; 
+  border-radius:16px}
+
+.hero h1{margin:0 0 10px 0; 
+  font-size: clamp(22px, 2.2vw, 32px)}
+.muted{color:var(--muted)}
+
+/* Grid */
+.grid{display:grid; 
+  gap:16px; 
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+  margin-top:18px}
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08); 
+  border-radius: var(--radius); 
+  overflow:hidden;
+  box-shadow: var(--shadow); 
+  display:flex; 
+  flex-direction:column;
+}
+.poster{aspect-ratio: 2/3; 
+  width:100%; object-fit:cover; 
+  background:#0e1420}
+
+.card .body{padding:12px}
+.title{font-weight:700; font-size:14.5px; line-height:1.3}
+.meta{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px 0}
+.chip{font-size:12px; padding:4px 8px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--card)}
+.actions{display:flex; gap:8px; margin-top:auto; padding:12px}
+.btn{display:inline-flex; align-items:center; gap:8px; justify-content:center; text-decoration:none}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#051219; border:none; font-weight:700}
+.btn.ghost:hover{background:rgba(255,255,255,.06)}
+
+/* Footer */
+footer{margin:30px 0 60px 0; color:var(--muted); text-align:center}
+
+/* Modal */
+dialog{border:none; border-radius:18px; padding:0; width:min(920px, 92vw); overflow:hidden; background-color: #cdd6e7;}
+dialog{border:none; border-radius:18px; padding:0; width:min(920px, 92vw); overflow:hidden; background-color: #cdd6e7;}
+.modal-head{padding:14px 16px; border-bottom:1px solid rgba(223, 16, 16, 0.08); display:flex; align-items:center; justify-content:space-between}
+.modal-content{display:grid; grid-template-columns: 1fr 1.6fr; gap:14px; padding:16px}
+.modal-content img{width:100%; border-radius:14px}
+.stack{display:flex; flex-direction:column; gap:10px}
+.kvs{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+.kv{background:var(--card); border:1px solid rgba(255,255,255,.08); padding:10px; border-radius:12px}
+
+/* Pagination */
+.pagination{display:flex; justify-content:center; gap:8px; margin-top:18px}
+.page{min-width:40px; height:40px; display:grid; place-items:center; border-radius:12px; background:var(--surface); border:1px solid rgba(255,255,255,.08); cursor:pointer}
+.page.active{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#001014; font-weight:800; border:none}
+
+/* Toast */
+.toast{position:fixed; right:18px; bottom:18px; background:var(--surface); border:1px solid rgba(255,255,255,.1); padding:12px 14px; border-radius:12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); transition:.25s}
+.toast.show{opacity:1; transform: translateY(0)}
+
+/* Small */
+@media (max-width: 860px){
+  .bar{grid-template-columns: 1fr; gap:10px}
+  .hero{grid-template-columns: 1fr;}
+  .modal-content{grid-template-columns: 1fr}
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap bar">
+      <div class="logo">
+        <div class="logo-badge">CB</div>
+        <div>
+          <div style="font-size:18px; line-height:1">CinemaBox</div>
+          <div class="muted" style="font-size:12px"> !...Website Name ...!</div>
+        </div>
+      </div>
+      <div class="search">
+        <input id="q" placeholder="Search movies, year, language… (e.g., 'Hindi 2023 1080p')" />
+      </div>
+      <div class="filters">
+        <select id="genre">
+          <option value="">All Genres</option>
+        </select>
+        <select id="quality">
+          <option value="">All Qualities</option>
+          <option>480p</option>
+          <option>720p</option>
+          <option>1080p</option>
+          <option>2160p</option>
+        </select>
+        <select id="sort">
+          <option value="latest">Latest</option>
+          <option value="alpha">A → Z</option>
+          <option value="rating">Rating</option>
+          <option value="size">File Size</option>
+        </select>
+        <button id="dark" class="toggle" title="Toggle theme">☼ / ☾</button>
+      </div>
+    </div>
+  </header>  <main class="wrap">
+    <section class="hero">
+      <img src="https://picsum.photos/seed/cinemabox/900/520" alt="Hero" loading="lazy" />
+      <div>
+        
+      
+      <h1><span style="background:linear-gradient(135deg,var(--danger),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent"> Title for Our Website</span></h1>
+      <h1><span style="background:linear-gradient(135deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent"> Download Latest Movies and Shows In Free </span></h1>
+        <p class="muted">This is a <b>front‑end template</b>. ... Anything you can write down Here... <i> This webiste is made by Rahul and Kelvin</i>...........................................................</p>
+        <div style="display:flex; gap:10px; margin-top:12px">
+          <a class="btn primary" href="#grid">Browse Library</a>
+          <a class="btn ghost" href="#" id="how">How to use</a>
+        </div>
+      </div>
+    </section><section id="grid" class="grid" aria-live="polite"></section>
+<div class="pagination" id="pages"></div>
+
+  </main>  <footer class="wrap">
+    For educational use. Ensure you have rights to any content you distribute. © <span id="year"></span> CinemaBox. \<nav></nav>
+  </footer>  <dialog id="modal">
+    <div class="modal-head">
+      <div style="font-weight:800" id="m-title">Title</div>
+      <button id="m-close" class="btn">Close</button>
+    </div>
+    <div class="modal-content">
+      <img id="m-poster" alt="Poster" />
+      <div class="stack">
+        <div id="m-desc" class="muted"></div>
+        <div class="kvs">
+          <div class="kv"><b>Year:</b> <span id="m-year"></span></div>
+          <div class="kv"><b>Quality:</b> <span id="m-quality"></span></div>
+          <div class="kv"><b>Size:</b> <span id="m-size"></span></div>
+          <div class="kv"><b>Rating:</b> ⭐ <span id="m-rating"></span>/10</div>
+          <div class="kv"><b>Language:</b> <span id="m-lang"></span></div>
+          <div class="kv"><b>Genre:</b> <span id="m-genre"></span></div>
+        </div>
+        <div class="actions">
+          <a href="#" class="btn primary" id="m-direct">Direct Download</a>
+          <a href="#" class="btn" id="m-alt">Alternate Link</a>
+        </div>
+      </div>
+    </div>
+  </dialog>  <div class="toast" id="toast"></div>  <script>
+    // ------- Demo Data (replace with your content or fetch from your backend) -------
+    const MOVIES = [
+      {
+        id: 1,
+        title: "Starlight Odyssey",
+        year: 2024,
+        rating: 8.6,
+        quality: "1080p",
+        size: 1.9,
+        genres: ["Sci‑Fi", "Adventure"],
+        language: "English",
+        poster: "https://picsum.photos/seed/starlight/400/600",
+        desc: "Description :  A deep‑space salvage crew discovers an artifact that can fold time—and enemies who would kill for it.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 2,
+        title: "Monsoon Diaries",
+        year: 2023,
+        rating: 7.4,
+        quality: "720p",
+        size: 1.2,
+        genres: ["Drama", "Romance"],
+        language: "Hindi",
+        poster: "https://picsum.photos/seed/monsoon/400/600",
+        desc: "Description :  Two strangers cross paths in Mumbai as the rains test their courage and choices.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 3,
+        title: "Crimson Heist",
+        year: 2022,
+        rating: 7.9,
+        quality: "2160p",
+        size: 3.8,
+        genres: ["Action", "Thriller"],
+        language: "English",
+        poster: "https://picsum.photos/seed/heist/400/600",
+        desc: "Description :  A mastermind thief attempts one last score inside a biometric fortress.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 4,
+        title: "Valley of Echoes",
+        year: 2021,
+        rating: 8.1,
+        quality: "1080p",
+        size: 2.4,
+        genres: ["Mystery", "Horror"],
+        language: "Tamil",
+        poster: "https://picsum.photos/seed/echoes/400/600",
+        desc: "Description :  An abandoned hill station hides the echoes of a vanished expedition.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 5,
+        title: "Byte Warriors",
+        year: 2025,
+        rating: 8.9,
+        quality: "1080p",
+        size: 2.1,
+        genres: ["Animation", "Action"],
+        language: "Japanese",
+        poster: "https://picsum.photos/seed/byte/400/600",
+        desc: "Description :  A team of teen coders battles rogue AIs inside a neon‑drenched cyberscape.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 6,
+        title: "Frontier 1899",
+        year: 2020,
+        rating: 7.1,
+        quality: "480p",
+        size: 0.9,
+        genres: ["Western", "Drama"],
+        language: "English",
+        poster: "https://picsum.photos/seed/frontier/400/600",
+        desc: "Description :  Settlers clash with outlaws as a railway cuts through sacred land.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 7,
+        title: "Quantum Raga",
+        year: 2024,
+        rating: 8.0,
+        quality: "2160p",
+        size: 4.2,
+        genres: ["Sci‑Fi", "Musical"],
+        language: "Hindi",
+        poster: "https://picsum.photos/seed/raga/400/600",
+        desc: "Description :  A physicist tunes reality with classical ragas to find a missing sibling across worlds.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 8,
+        title: "Desert Run",
+        year: 2019,
+        rating: 6.8,
+        quality: "720p",
+        size: 1.4,
+        genres: ["Action", "Adventure"],
+        language: "English",
+        poster: "https://picsum.photos/seed/desert/400/600",
+        desc: "Description :  Smugglers, a storm, and a lost convoy in the Great Indian Desert.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 9,
+        title: "Aurora Station",
+        year: 2025,
+        rating: 9.1,
+        quality: "2160p",
+        size: 4.8,
+        genres: ["Sci‑Fi", "Drama"],
+        language: "English",
+        poster: "https://picsum.photos/seed/aurora/400/600",
+        desc: "Description :  A stranded research crew confronts a sentient polar night.",
+        links: { direct: "#", alt: "#" }
+      },
+      {
+        id: 10,
+        title: "Chai & Chronicles",
+        year: 2022,
+        rating: 7.6,
+        quality: "1080p",
+        size: 2.0,
+        genres: ["Comedy", "Slice of Life"],
+        language: "Hindi",
+        poster: "https://picsum.photos/seed/chai/400/600",
+        desc: "A small‑town vlogger tastes fame and trouble one cup at a time.",
+        links: { direct: "#", alt: "#" }
+      }
+    ];
+
+    // ------- State & Elements -------
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+
+    const state = { q:"", genre:"", quality:"", sort:"latest", page:1, perPage: 8 };
+
+    const elGrid = $('#grid');
+    const elPages = $('#pages');
+    const elGenre = $('#genre');
+    const elQuality = $('#quality');
+    const elSort = $('#sort');
+
+    // Populate genre options
+    const allGenres = [...new Set(MOVIES.flatMap(m => m.genres))].sort();
+    allGenres.forEach(g => {
+      const opt = document.createElement('option'); opt.value = g; opt.textContent = g; elGenre.append(opt);
+    });
+
+    // ------- Render -------
+    function normalize(s){ return s.toString().toLowerCase(); }
+
+    function applyFilters(){
+      let list = MOVIES.slice();
+      const q = normalize(state.q);
+      if(q){
+        list = list.filter(m => normalize(m.title).includes(q)
+          || String(m.year).includes(q)
+          || normalize(m.language).includes(q)
+          || normalize(m.quality).includes(q)
+          || m.genres.some(g => normalize(g).includes(q))
+        );
+      }
+      if(state.genre) list = list.filter(m => m.genres.includes(state.genre));
+      if(state.quality) list = list.filter(m => m.quality === state.quality);
+
+      switch(state.sort){
+        case 'alpha': list.sort((a,b)=> a.title.localeCompare(b.title)); break;
+        case 'rating': list.sort((a,b)=> b.rating - a.rating); break;
+        case 'size': list.sort((a,b)=> b.size - a.size); break;
+        default: list.sort((a,b)=> b.year - a.year || b.id - a.id); // latest
+      }
+      return list;
+    }
+
+    function paginate(list){
+      const start = (state.page-1)*state.perPage;
+      return list.slice(start, start + state.perPage);
+    }
+
+    function render(){
+      const list = applyFilters();
+      const pageItems = paginate(list);
+      elGrid.innerHTML = pageItems.map(toCard).join('');
+      renderPages(Math.ceil(list.length / state.perPage));
+      attachCardHandlers();
+    }
+
+    function bytesLabel(gb){
+      if(gb >= 1) return gb.toFixed(1)+ ' GB';
+      return Math.round(gb*1000) + ' MB';
+    }
+
+    function toCard(m){
+      const chips = [m.quality, m.language, ...m.genres].map(c=>`<span class="chip">${c}</span>`).join('');
+      return `
+      <article class="card" tabindex="0" aria-label="${m.title} ${m.quality}">
+        <img class="poster" src="${m.poster}" alt="${m.title} poster" loading="lazy" />
+        <div class="body">
+          <div class="title">${m.title}</div>
+          <div class="muted" style="font-size:12px">${m.year} • ⭐ ${m.rating}/10</div>
+          <div class="meta">${chips}</div>
+        </div>
+        <div class="actions">
+          <a href="#" class="btn primary" data-open="${m.id}">Details</a>
+          <a href="#" class="btn ghost" data-dl="${m.id}">Download</a>
+        </div>
+      </article>`;
+    }
+
+    function renderPages(total){
+      elPages.innerHTML = '';
+      if(total <= 1) return;
+      const makeBtn = (n,label=n) => {
+        const b = document.createElement('button');
+        b.className = 'page' + (n===state.page?' active':'');
+        b.textContent = label; b.addEventListener('click', ()=>{ state.page=n; render(); window.scrollTo({top:0, behavior:'smooth'})});
+        return b;
+      }
+      elPages.append(makeBtn(Math.max(1, state.page-1), '‹'));
+      for(let i=1;i<=total;i++) elPages.append(makeBtn(i));
+      elPages.append(makeBtn(Math.min(total, state.page+1), '›'));
+    }
+
+    // ------- Listeners -------
+    $('#q').addEventListener('input', e=>{ state.q = e.target.value; state.page=1; render(); });
+    elGenre.addEventListener('change', e=>{ state.genre = e.target.value; state.page=1; render(); });
+    elQuality.addEventListener('change', e=>{ state.quality = e.target.value; state.page=1; render(); });
+    elSort.addEventListener('change', e=>{ state.sort = e.target.value; render(); });
+
+    $('#how').addEventListener('click', e=>{
+      e.preventDefault();
+      toast("This is a front‑end template. Replace demo data & '#' links with your own legal files or connect an API.");
+    });
+
+    // Card handlers
+    function attachCardHandlers(){
+      $$('[data-open]').forEach(btn=> btn.addEventListener('click', e=>{
+        e.preventDefault(); const id = +btn.dataset.open; openModal(id);
+      }));
+      $$('[data-dl]').forEach(btn=> btn.addEventListener('click', e=>{
+        e.preventDefault(); const id = +btn.dataset.dl; const m = MOVIES.find(x=>x.id===id);
+        mockedDownload(m);
+      }));
+    }
+
+    // ------- Modal -------
+    const modal = $('#modal');
+    $('#m-close').addEventListener('click', ()=> modal.close());
+
+    function openModal(id){
+      const m = MOVIES.find(x=>x.id===id); if(!m) return;
+      $('#m-title').textContent = m.title;
+      $('#m-poster').src = m.poster;
+      $('#m-desc').textContent = m.desc;
+      $('#m-year').textContent = m.year;
+      $('#m-quality').textContent = m.quality;
+      $('#m-size').textContent = bytesLabel(m.size);
+      $('#m-rating').textContent = m.rating;
+      $('#m-lang').textContent = m.language;
+      $('#m-genre').textContent = m.genres.join(', ');
+      const direct = $('#m-direct');
+      const alt = $('#m-alt');
+      // Mocked links to prevent misuse — replace with real links you own rights to
+      direct.href = m.links.direct; direct.onclick = (e)=>{ e.preventDefault(); mockedDownload(m) };
+      alt.href = m.links.alt; alt.onclick = (e)=>{ e.preventDefault(); mockedDownload(m) };
+      modal.showModal();
+    }
+
+    // ------- UX Utilities -------
+    function toast(msg){
+      const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(t._h);
+      t._h = setTimeout(()=> t.classList.remove('show'), 2400);
+    }
+
+    function mockedDownload(m){
+      toast(`Add your real download link for: ${m.title} (${m.quality})`);
+    }
+
+    // Theme toggle (persist)
+    const DARK_KEY = 'cb.dark';
+    function setDark(on){ document.documentElement.classList.toggle('dark', on); localStorage.setItem(DARK_KEY, on? '1':'0'); }
+    function getDark(){ return localStorage.getItem(DARK_KEY) === '1'; }
+    $('#dark').addEventListener('click', ()=> setDark(!getDark()));
+    if(getDark()) setDark(true);
+
+    // Footer year
+    $('#year').textContent = new Date().getFullYear();
+
+    // First render
+    render();
+
+   
+  </script></b
